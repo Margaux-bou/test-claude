@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Astreinte de garde",
+    "description": "Rotation hebdomadaire de la responsabilité on-call, non documentée ailleurs mais suivie par toute l'équipe.",
+    "trigger": "début de la semaine (lundi 9h)",
+    "owner": "ingénieur de garde",
+    "tools": ["PagerDuty", "Google Calendar"],
+    "frequency": "hebdomadaire",
+    "steps": [
+      "Vérifier le planning de rotation partagé",
+      "Confirmer sa disponibilité dans PagerDuty",
+      "Passer le relais à la personne suivante le lundi suivant"
+    ],
+    "assignees": ["Léa Fontaine", "Karim Haddad", "Yasmine Bouzid"]
+  },
+  {
+    "name": "Revue trimestrielle des accès",
+    "description": "Audit manuel des accès aux systèmes sensibles, convenu à l'oral mais jamais formalisé.",
+    "trigger": "premier lundi du trimestre",
+    "owner": "responsable sécurité",
+    "tools": ["Google Workspace Admin", "GitHub"],
+    "frequency": "trimestrielle",
+    "steps": [
+      "Exporter la liste des accès actifs",
+      "Comparer avec les départs/arrivées du trimestre",
+      "Révoquer les accès obsolètes"
+    ],
+    "assignees": ["Karim Haddad"]
+  }
+]

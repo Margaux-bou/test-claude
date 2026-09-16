@@ -8,11 +8,13 @@ Exemple::
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
 from .extractor import ClaudeExtractor, HeuristicExtractor, build_extractor
 from .ingest import load_documents
+from .manual import load_manual_processes
 from .registry import ProcessRegistry
 from .report import to_html, to_json, to_markdown
 
@@ -45,6 +47,23 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--team-label",
         default="Équipe",
         help="Nom affiché dans le tableau de bord HTML (ex: 'Équipe Ingénierie').",
+    )
+    parser.add_argument(
+        "--manual-file",
+        default=None,
+        help=(
+            "Fichier JSON de processus déclarés à la main (avec leurs membres assignés), "
+            "fusionné avec les processus détectés automatiquement. Voir data/manual_processes.json."
+        ),
+    )
+    parser.add_argument(
+        "--roster-file",
+        default=None,
+        help=(
+            "Fichier JSON listant les membres de l'équipe (liste de noms), utilisé pour "
+            "proposer des assignations dans le tableau de bord même pour des membres pas "
+            "encore assignés à un processus. Voir data/team_roster.json."
+        ),
     )
     parser.add_argument(
         "--engine",
@@ -85,7 +104,19 @@ def main(argv: list[str] | None = None) -> int:
         registry.add_all(records)
         print(f"[process-agent]   {document.source}: {len(records)} processus détecté(s)", file=sys.stderr)
 
+    if args.manual_file:
+        manual_records = load_manual_processes(args.manual_file)
+        registry.add_all(manual_records)
+        print(
+            f"[process-agent] {len(manual_records)} processus déclaré(s) manuellement depuis {args.manual_file}",
+            file=sys.stderr,
+        )
+
     results = registry.all()
+
+    roster: list[str] = []
+    if args.roster_file:
+        roster = json.loads(Path(args.roster_file).read_text(encoding="utf-8"))
 
     Path(args.output).write_text(to_markdown(results), encoding="utf-8")
     print(f"[process-agent] Rapport écrit dans {args.output}", file=sys.stderr)
@@ -95,12 +126,14 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[process-agent] Registre JSON écrit dans {args.json_output}", file=sys.stderr)
 
     if args.html_output:
-        Path(args.html_output).write_text(to_html(results, team_label=args.team_label), encoding="utf-8")
+        html = to_html(results, team_label=args.team_label, roster=roster)
+        Path(args.html_output).write_text(html, encoding="utf-8")
         print(f"[process-agent] Tableau de bord HTML écrit dans {args.html_output}", file=sys.stderr)
 
     print(f"\n{len(results)} processus identifié(s) au total.")
     for record in results:
-        print(f"- {record.name} ({len(record.sources)} source(s))")
+        assigned = f", assigné à {', '.join(record.assignees)}" if record.assignees else ""
+        print(f"- {record.name} ({len(record.sources)} source(s){assigned})")
 
     return 0
 

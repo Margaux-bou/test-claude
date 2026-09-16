@@ -30,6 +30,7 @@ class ProcessRecord:
     frequency: str = ""
     confidence: float = 0.5
     sources: list[str] = field(default_factory=list)
+    assignees: list[str] = field(default_factory=list)
 
     def key(self) -> str:
         """Clé normalisée utilisée pour rapprocher deux mentions du même processus."""
@@ -48,6 +49,7 @@ class ProcessRecord:
 
         merged_tools = list(dict.fromkeys(self.tools + other.tools))
         merged_sources = list(dict.fromkeys(self.sources + other.sources))
+        merged_assignees = list(dict.fromkeys(self.assignees + other.assignees))
 
         return ProcessRecord(
             name=self.name,
@@ -59,4 +61,5 @@ class ProcessRecord:
             frequency=self.frequency or other.frequency,
             confidence=max(self.confidence, other.confidence),
             sources=merged_sources,
+            assignees=merged_assignees,
         )
