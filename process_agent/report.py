@@ -92,41 +92,43 @@ def to_html(
 _HTML_TEMPLATE = r"""<title>Registre des processus</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F4F5F2; --surface:#FFFFFF; --surface-alt:#ECEFEA; --line:#DBDFD7;
-    --ink:#1B2420; --ink-dim:#5B665F;
-    --accent:#1E7A67; --accent-strong:#145C4E; --accent-soft:#E1F0EA;
-    --amber:#A9720F; --amber-soft:#FAF0DC;
-    --rose:#A6402C; --rose-soft:#F7E6E0;
-    --radius:14px;
+    --bg:#F7F8FA; --surface:#FFFFFF; --surface-alt:#EEF1F4; --line:#E3E7EB;
+    --ink:#14181C; --ink-dim:#6B7280;
+    --accent:#2563EB; --accent-strong:#1D4ED8; --accent-soft:#DBEAFE;
+    --success:#16A34A; --success-soft:#DCFCE7;
+    --warning:#D97706; --warning-soft:#FEF3C7;
+    --danger:#DC2626; --danger-soft:#FEE2E2;
+    --radius:12px; --radius-sm:8px;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#10161A; --surface:#17211D; --surface-alt:#1E2A25; --line:#2B3A33;
-      --ink:#EAF1EC; --ink-dim:#9BAFA5;
-      --accent:#4FD3AE; --accent-strong:#8FE9CE; --accent-soft:#1B3B32;
-      --amber:#E8B95B; --amber-soft:#3A2F14;
-      --rose:#E38268; --rose-soft:#3A2018;
+      --bg:#0D1117; --surface:#161B22; --surface-alt:#1C2129; --line:#2D333B;
+      --ink:#E6EDF3; --ink-dim:#8B949E;
+      --accent:#3B82F6; --accent-strong:#60A5FA; --accent-soft:#1E3A5F;
+      --success:#22C55E; --success-soft:#123322;
+      --warning:#F59E0B; --warning-soft:#3A2A0A;
+      --danger:#F87171; --danger-soft:#3A1414;
     }
   }
   :root[data-theme="dark"]{
-    --bg:#10161A; --surface:#17211D; --surface-alt:#1E2A25; --line:#2B3A33;
-    --ink:#EAF1EC; --ink-dim:#9BAFA5;
-    --accent:#4FD3AE; --accent-strong:#8FE9CE; --accent-soft:#1B3B32;
-    --amber:#E8B95B; --amber-soft:#3A2F14;
-    --rose:#E38268; --rose-soft:#3A2018;
+    --bg:#0D1117; --surface:#161B22; --surface-alt:#1C2129; --line:#2D333B;
+    --ink:#E6EDF3; --ink-dim:#8B949E;
+    --accent:#3B82F6; --accent-strong:#60A5FA; --accent-soft:#1E3A5F;
+    --success:#22C55E; --success-soft:#123322;
+    --warning:#F59E0B; --warning-soft:#3A2A0A;
+    --danger:#F87171; --danger-soft:#3A1414;
   }
 
   *{box-sizing:border-box;}
   body{
     margin:0; background:var(--bg); color:var(--ink);
-    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    font-family:"Inter",system-ui,-apple-system,sans-serif;
     padding-inline:20px; padding-block:28px 60px;
   }
   .wrap{max-width:1080px; margin:0 auto;}
-  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;}
 
   header.top{display:flex; flex-wrap:wrap; gap:16px 24px; align-items:flex-end; justify-content:space-between; margin-bottom:28px;}
   .title-block h1{
@@ -137,10 +139,10 @@ _HTML_TEMPLATE = r"""<title>Registre des processus</title>
   .badge-sample{
     display:inline-flex; align-items:center; gap:6px;
     background:var(--surface-alt); border:1px solid var(--line); color:var(--ink-dim);
-    font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:.04em;
+    font-size:0.72rem; font-weight:500; letter-spacing:.04em;
     text-transform:uppercase; padding:5px 10px; border-radius:999px; white-space:nowrap;
   }
-  .badge-sample::before{content:"●"; color:var(--amber); font-size:0.6rem;}
+  .badge-sample::before{content:"●"; color:var(--accent); font-size:0.6rem;}
 
   .stats{
     display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
@@ -150,7 +152,7 @@ _HTML_TEMPLATE = r"""<title>Registre des processus</title>
     background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
     padding:14px 16px;
   }
-  .stat .num{font-family:"IBM Plex Mono",monospace; font-size:1.7rem; font-weight:600; font-variant-numeric:tabular-nums; color:var(--accent-strong);}
+  .stat .num{font-size:1.7rem; font-weight:700; font-variant-numeric:tabular-nums; color:var(--accent-strong);}
   .stat .lbl{font-size:0.78rem; color:var(--ink-dim); margin-top:2px;}
 
   .toolbar{
@@ -159,7 +161,7 @@ _HTML_TEMPLATE = r"""<title>Registre des processus</title>
     background:var(--bg); padding-block:8px; z-index:5;
   }
   #search{
-    flex:1 1 220px; min-width:0; padding:10px 14px; border-radius:10px;
+    flex:1 1 220px; min-width:0; padding:10px 14px; border-radius:var(--radius-sm);
     border:1px solid var(--line); background:var(--surface); color:var(--ink);
     font-size:0.92rem; font-family:inherit;
   }
@@ -171,7 +173,7 @@ _HTML_TEMPLATE = r"""<title>Registre des processus</title>
   #clear:hover{color:var(--ink);}
 
   .btn{
-    border-radius:10px; padding:9px 16px; font-size:0.86rem; font-weight:500; cursor:pointer;
+    border-radius:var(--radius-sm); padding:9px 16px; font-size:0.86rem; font-weight:500; cursor:pointer;
     font-family:inherit; border:1px solid transparent; transition:background .12s, border-color .12s, color .12s;
     white-space:nowrap;
   }
@@ -184,7 +186,7 @@ _HTML_TEMPLATE = r"""<title>Registre des processus</title>
   .filter-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px;}
   .filter-row:last-of-type{margin-bottom:18px;}
   .chipbar-label{
-    font-size:0.72rem; color:var(--ink-dim); font-family:"IBM Plex Mono",monospace;
+    font-size:0.72rem; color:var(--ink-dim); font-weight:600;
     text-transform:uppercase; letter-spacing:.04em; flex:none;
   }
   .chipbar{display:flex; flex-wrap:wrap; gap:6px;}
@@ -209,17 +211,17 @@ _HTML_TEMPLATE = r"""<title>Registre des processus</title>
   .grid2{display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:12px;}
   .field{display:flex; flex-direction:column; gap:5px;}
   .field label{
-    font-size:0.72rem; color:var(--ink-dim); font-family:"IBM Plex Mono",monospace;
+    font-size:0.72rem; color:var(--ink-dim); font-weight:600;
     text-transform:uppercase; letter-spacing:.03em;
   }
   .field input, .field textarea{
-    padding:9px 12px; border-radius:8px; border:1px solid var(--line); background:var(--bg);
+    padding:9px 12px; border-radius:var(--radius-sm); border:1px solid var(--line); background:var(--bg);
     color:var(--ink); font-family:inherit; font-size:0.88rem; resize:vertical;
   }
   .field input:focus, .field textarea:focus{outline:2px solid var(--accent); outline-offset:1px;}
   .checklist{
     display:flex; flex-wrap:wrap; gap:8px; padding:10px; border:1px solid var(--line);
-    border-radius:10px; background:var(--bg);
+    border-radius:var(--radius-sm); background:var(--bg);
   }
   .checklist label{
     display:flex; align-items:center; gap:6px; font-size:0.84rem; cursor:pointer;
@@ -239,42 +241,42 @@ _HTML_TEMPLATE = r"""<title>Registre des processus</title>
   .card-head h2{margin:0; font-size:1.08rem; font-weight:600; text-wrap:balance;}
   .card-head-actions{display:flex; align-items:center; gap:6px; flex:none;}
   .manual-badge{
-    font-family:"IBM Plex Mono",monospace; font-size:0.64rem; text-transform:uppercase; letter-spacing:.04em;
-    background:var(--amber-soft); color:var(--amber); border-radius:999px; padding:3px 8px; white-space:nowrap;
+    font-size:0.68rem; font-weight:600; text-transform:uppercase; letter-spacing:.04em;
+    background:var(--surface-alt); color:var(--ink-dim); border-radius:999px; padding:3px 8px; white-space:nowrap;
   }
   .icon-btn{
     border:none; background:none; color:var(--ink-dim); cursor:pointer; font-size:0.9rem;
     padding:2px 6px; line-height:1.6; border-radius:6px; font-family:inherit;
   }
-  .icon-btn:hover{color:var(--rose); background:var(--rose-soft);}
+  .icon-btn:hover{color:var(--danger); background:var(--danger-soft);}
   .card .desc{font-size:0.88rem; color:var(--ink-dim); margin:0; line-height:1.45;}
 
   .meta{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:0.8rem; color:var(--ink-dim);}
   .meta .item{display:flex; gap:5px; align-items:baseline;}
-  .meta .k{font-family:"IBM Plex Mono",monospace; font-size:0.68rem; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-dim); opacity:.85;}
+  .meta .k{font-size:0.68rem; font-weight:600; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-dim); opacity:.85;}
   .meta .v{color:var(--ink);}
 
   .tools{display:flex; flex-wrap:wrap; gap:6px;}
   .tool{
     background:var(--surface-alt); border:1px solid var(--line); color:var(--ink-dim);
-    font-size:0.74rem; padding:3px 9px; border-radius:999px; font-family:"IBM Plex Mono",monospace;
+    font-size:0.74rem; padding:3px 9px; border-radius:999px;
   }
 
   .conf{display:flex; align-items:center; gap:8px; font-size:0.78rem; color:var(--ink-dim);}
   .conf .bar{flex:1; max-width:90px; height:6px; border-radius:4px; background:var(--surface-alt); overflow:hidden;}
   .conf .fill{height:100%; border-radius:4px;}
-  .conf .pct{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums;}
-  .conf.good .fill{background:var(--accent);}
-  .conf.good .pct{color:var(--accent-strong);}
-  .conf.mid .fill{background:var(--amber);}
-  .conf.mid .pct{color:var(--amber);}
-  .conf.low .fill{background:var(--rose);}
-  .conf.low .pct{color:var(--rose);}
+  .conf .pct{font-weight:600; font-variant-numeric:tabular-nums;}
+  .conf.good .fill{background:var(--success);}
+  .conf.good .pct{color:var(--success);}
+  .conf.mid .fill{background:var(--warning);}
+  .conf.mid .pct{color:var(--warning);}
+  .conf.low .fill{background:var(--danger);}
+  .conf.low .pct{color:var(--danger);}
 
   .assign-block{display:flex; flex-direction:column; gap:8px; border-top:1px dashed var(--line); padding-top:10px;}
   .assign-row{display:flex; flex-wrap:wrap; align-items:center; gap:6px;}
   .assign-label{
-    font-family:"IBM Plex Mono",monospace; font-size:0.68rem; text-transform:uppercase;
+    font-size:0.68rem; font-weight:600; text-transform:uppercase;
     letter-spacing:.04em; color:var(--ink-dim); flex:none;
   }
   .person{
@@ -284,7 +286,7 @@ _HTML_TEMPLATE = r"""<title>Registre des processus</title>
   .person .avatar{
     width:18px; height:18px; border-radius:50%; background:var(--accent); color:#fff;
     display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:700;
-    font-family:"IBM Plex Mono",monospace; flex:none;
+    flex:none;
   }
   .unassigned{color:var(--ink-dim); font-size:0.82rem; font-style:italic;}
   .assign-toggle{
@@ -308,13 +310,12 @@ _HTML_TEMPLATE = r"""<title>Registre des processus</title>
   .card.open .steps{display:flex;}
   .step{display:flex; gap:12px; padding-block:6px;}
   .step .n{
-    font-family:"IBM Plex Mono",monospace; font-size:0.76rem; color:var(--accent-strong);
+    font-size:0.76rem; font-weight:600; color:var(--accent-strong);
     background:var(--accent-soft); border-radius:50%; width:22px; height:22px; flex:none;
-    display:flex; align-items:center; justify-content:center; font-weight:600;
+    display:flex; align-items:center; justify-content:center;
   }
   .step .t{font-size:0.86rem; padding-top:2px; line-height:1.4;}
   .sources{font-size:0.76rem; color:var(--ink-dim); margin-top:4px;}
-  .sources span{font-family:"IBM Plex Mono",monospace;}
 
   .empty{
     text-align:center; padding:60px 20px; color:var(--ink-dim);
