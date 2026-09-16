@@ -14,7 +14,7 @@ from pathlib import Path
 from .extractor import ClaudeExtractor, HeuristicExtractor, build_extractor
 from .ingest import load_documents
 from .registry import ProcessRegistry
-from .report import to_json, to_markdown
+from .report import to_html, to_json, to_markdown
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -35,6 +35,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--json-output",
         default=None,
         help="Fichier JSON optionnel contenant le registre structuré.",
+    )
+    parser.add_argument(
+        "--html-output",
+        default=None,
+        help="Fichier HTML optionnel : tableau de bord interactif (recherche, filtres, étapes).",
+    )
+    parser.add_argument(
+        "--team-label",
+        default="Équipe",
+        help="Nom affiché dans le tableau de bord HTML (ex: 'Équipe Ingénierie').",
     )
     parser.add_argument(
         "--engine",
@@ -83,6 +93,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.json_output:
         Path(args.json_output).write_text(to_json(results), encoding="utf-8")
         print(f"[process-agent] Registre JSON écrit dans {args.json_output}", file=sys.stderr)
+
+    if args.html_output:
+        Path(args.html_output).write_text(to_html(results, team_label=args.team_label), encoding="utf-8")
+        print(f"[process-agent] Tableau de bord HTML écrit dans {args.html_output}", file=sys.stderr)
 
     print(f"\n{len(results)} processus identifié(s) au total.")
     for record in results:

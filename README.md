@@ -26,9 +26,10 @@ onboarding, déploiement, rétrospective, etc.
    regroupe les mentions similaires et fusionne leurs informations
    (déclencheur, étapes, outils, responsable, sources).
 4. **Rapport** (`process_agent/report.py`) : génère un rapport Markdown
-   (tableau récapitulatif + fiche détaillée par processus) et,
-   optionnellement, un export JSON structuré exploitable par un autre
-   outil.
+   (tableau récapitulatif + fiche détaillée par processus), un export JSON
+   structuré exploitable par un autre outil, et un **tableau de bord HTML
+   interactif** autonome (recherche, filtre par responsable, étapes
+   dépliables, indicateur de confiance) — voir capture ci-dessous.
 
 ## Utilisation
 
@@ -40,14 +41,23 @@ python -m process_agent.cli --data-dir data/samples --output processes_report.md
 
 # Avec l'API Claude (extraction plus fine sur du texte libre)
 export ANTHROPIC_API_KEY=sk-...
-python -m process_agent.cli --data-dir data/samples --output processes_report.md --json-output processes.json
+python -m process_agent.cli --data-dir data/samples \
+  --output processes_report.md \
+  --json-output processes.json \
+  --html-output dashboard.html --team-label "Équipe Ingénierie"
 ```
+
+Ouvrez ensuite `dashboard.html` dans un navigateur pour explorer les
+processus identifiés (recherche, filtre par responsable, détail des
+étapes, indicateur de confiance).
 
 Options utiles :
 
 - `--engine {auto,claude,heuristic}` : force un moteur en particulier.
 - `--model` : modèle Claude à utiliser (défaut `claude-sonnet-4-5`).
 - `--json-output` : écrit aussi le registre structuré en JSON.
+- `--html-output` / `--team-label` : génère le tableau de bord HTML
+  interactif, avec le nom d'équipe affiché en en-tête.
 
 ## Données d'exemple
 
