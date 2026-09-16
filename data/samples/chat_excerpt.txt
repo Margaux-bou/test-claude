@@ -1,0 +1,9 @@
+[Slack #general — extrait]
+
+09:14 léa: rappel, comme tous les vendredis on fait la démo sprint à 15h,
+merci d'ajouter vos slides dans le doc partagé avant midi
+09:16 karim: ok je préviens aussi le PM
+09:20 léa: et n'oubliez pas: toute PR qui touche à l'API publique doit être
+relue par au moins 2 personnes de l'équipe backend, pas juste une
+10:02 karim: pour les demandes clients urgentes, on ouvre un ticket "P1" dans
+Jira et on notifie #support directement, le PM priorise dans l'heure
